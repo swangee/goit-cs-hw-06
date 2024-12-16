@@ -24,8 +24,11 @@ class SocketServer:
         while True:
             try:
                 message = await ws.recv()
+                logging.debug(f"Received message: {message}")
+
                 self.__handle_message(message)
             except Exception as e:
+                logging.error(f"Message handling error: {e}")
                 ws.send(json.dumps({"error": str(e)}))
 
     def __handle_message(self, message_str):
@@ -41,6 +44,8 @@ class HttpHandler(BaseHTTPRequestHandler):
     static_path = "http"
 
     def do_GET(self):
+        logging.debug(f"Received GET request: {self.path}")
+
         pr_url = urllib.parse.urlparse(self.path)
         if pr_url.path == '/':
             self.send_html_file(self.__make_file_name('index.html'))
