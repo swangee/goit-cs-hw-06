@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    environment:
+      MONGO_DSN: mongodb://mongo:27017/messages
+    ports:
+      - "3000:3000"
+      - "5005:5000"
+  mongo:
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
