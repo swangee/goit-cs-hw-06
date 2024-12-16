@@ -22,8 +22,11 @@ class SocketServer:
 
     async def ws_handler(self, ws):
         while True:
-            message = await ws.recv()
-            self.__handle_message(message)
+            try:
+                message = await ws.recv()
+                self.__handle_message(message)
+            except Exception as e:
+                ws.send(json.dumps({"error": str(e)}))
 
     def __handle_message(self, message_str):
         message = json.loads(message_str)
