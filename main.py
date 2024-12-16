@@ -27,9 +27,15 @@ class SocketServer:
                 logging.debug(f"Received message: {message}")
 
                 self.__handle_message(message)
+
+                await ws.send(json.dumps({"status": "ok"}))
+            except websockets.exceptions.ConnectionClosedError:
+                logging.info("Connection closed")
+                break
             except Exception as e:
                 logging.error(f"Message handling error: {e}")
-                ws.send(json.dumps({"error": str(e)}))
+                await ws.send(json.dumps({"error": str(e)}))
+                break
 
     def __handle_message(self, message_str):
         message = json.loads(message_str)
